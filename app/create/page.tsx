@@ -38,6 +38,12 @@ export default function CreatePage() {
 
   const payout = useMemo(() => bet ? americanPayout(amount, bet.odds) : 0, [amount, bet]);
 
+  function textGift() {
+    if (!giftUrl) return;
+    const body = `You got a BetGift 🎁 ${giftUrl}`;
+    window.location.href = `sms:${recipientPhone ? recipientPhone.replace(/[^+\d]/g, "") : ""}?&body=${encodeURIComponent(body)}`;
+  }
+
   async function copyGiftLink() {
     if (!giftUrl) return;
     try {
@@ -199,6 +205,7 @@ export default function CreatePage() {
           <div className="shareBox">{giftUrl}</div>
           <div className="buttonRow">
             <button className="secondaryButton" onClick={copyGiftLink}>{copied ? "Copied" : "Copy gift link"}</button>
+            <button className="secondaryButton" onClick={textGift}>Text gift</button>
             <a className="primaryButton" href={giftUrl}>Open recipient view</a>
           </div>
           <div className="buttonRow">
