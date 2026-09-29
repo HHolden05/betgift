@@ -28,6 +28,14 @@ npm run dev
 
 Open http://localhost:3000.
 
+## Deploy on Vercel
+
+1. Import the `HHolden05/betgift` GitHub repository into Vercel.
+2. Use the default Next.js build settings.
+3. Deploy once with no environment variables to run in demo-odds mode.
+4. When you have an Odds API key, add `ODDS_API_KEY` in the Vercel project's environment variables and redeploy.
+
+
 ## Optional live odds
 
 Create `.env.local`:
