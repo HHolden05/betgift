@@ -46,18 +46,36 @@ ODDS_API_KEY=your_key_here
 
 The events endpoint uses The Odds API v4 NFL odds endpoint with US regions and the `h2h,spreads,totals` markets.
 
-## Important Alpha limitation
+## Database-backed gift links
 
-Gift links currently encode the demo gift payload in the URL token. This makes links portable across devices without a database, but it is not appropriate for production or real-money use. The next persistence milestone is replacing encoded tokens with opaque database IDs and server-side records.
+When Supabase is configured, BetGift stores gifts server-side and generates short links such as:
+
+```
+https://betgift.vercel.app/g/A7KF29QX
+```
+
+Opening a stored gift updates its status from `created` to `opened`. Entering the simulated sportsbook handoff updates it to `claimed`.
+
+If Supabase environment variables are missing, the app keeps the older encoded-link demo mode so the site remains usable.
+
+## Supabase setup
+
+Run `supabase/schema.sql` in the Supabase SQL editor, then add these Vercel environment variables:
+
+```
+SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=YOUR_SERVER_ONLY_SERVICE_ROLE_KEY
+```
+
+Never expose the service-role key in client-side code or commit it to GitHub.
 
 ## Next milestones
 
-1. Supabase/Postgres persistence.
-2. User authentication.
-3. Real SMS/email delivery.
-4. Analytics funnel instrumentation.
-5. Operator-approved sportsbook deep links.
-6. Legal/compliance review before any real-money functionality.
+1. User authentication.
+2. Real SMS/email delivery.
+3. Analytics funnel instrumentation.
+4. Operator-approved sportsbook deep links.
+5. Legal/compliance review before any real-money functionality.
 
 
 ## Fastest production deployment
