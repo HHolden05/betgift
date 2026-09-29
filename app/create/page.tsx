@@ -16,6 +16,8 @@ export default function CreatePage() {
   const [step, setStep] = useState(1);
   const [recipientName, setRecipientName] = useState("John");
   const [recipientPhone, setRecipientPhone] = useState("");
+  const [recipientEmail, setRecipientEmail] = useState("");
+  const [emailStatus, setEmailStatus] = useState("");
   const [event, setEvent] = useState<EventOption | null>(null);
   const [bet, setBet] = useState<BetOption | null>(null);
   const [amount, setAmount] = useState(50);
@@ -53,7 +55,7 @@ export default function CreatePage() {
     const response = await fetch("/api/gifts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ recipientName, recipientPhone, amount, message, event, bet })
+      body: JSON.stringify({ recipientName, recipientPhone, recipientEmail, amount, message, event, bet })
     });
     const data = await response.json();
     if (!response.ok) {
@@ -61,6 +63,7 @@ export default function CreatePage() {
       return;
     }
     setGiftUrl(`${window.location.origin}${data.giftUrl}`);
+    setEmailStatus(data.emailStatus ?? "");
     setStep(6);
   }
 
@@ -81,6 +84,7 @@ export default function CreatePage() {
           <h1>Who’s getting the bet?</h1>
           <p className="lede small">Add their name and how you want the gift delivered.</p>
           <label>Name<input value={recipientName} onChange={(e) => setRecipientName(e.target.value)} placeholder="Recipient name" /></label>
+          <label>Email <span className="optional">(for delivery)</span><input type="email" value={recipientEmail} onChange={(e) => setRecipientEmail(e.target.value)} placeholder="friend@example.com" /></label>
           <label>Phone <span className="optional">(optional in Alpha)</span><input value={recipientPhone} onChange={(e) => setRecipientPhone(e.target.value)} placeholder="(215) 555-0184" /></label>
           <button className="primaryButton" disabled={!recipientName.trim()} onClick={() => setStep(2)}>Choose a game</button>
         </section>
@@ -172,13 +176,19 @@ export default function CreatePage() {
         <section className="flowCard successCard">
           <p className="eyebrow">BETGIFT CREATED</p>
           <h1>Send it to {recipientName}</h1>
-          <p className="lede small">The link works on another device. It contains a simulated gift only — no payment or wager.</p>
+          <p className="lede small">
+            {emailStatus === "sent"
+              ? `Email sent to ${recipientEmail}.`
+              : recipientEmail
+                ? "Gift created. Email delivery is not configured yet, so use the link below."
+                : "Gift created. Copy the link below to send it."}
+          </p>
           <div className="shareBox">{giftUrl}</div>
           <div className="buttonRow">
             <button className="secondaryButton" onClick={copyGiftLink}>{copied ? "Copied" : "Copy gift link"}</button>
             <a className="primaryButton" href={giftUrl}>Open recipient view</a>
           </div>
-          <button className="secondaryButton" onClick={() => { setStep(1); setGiftUrl(""); setCopied(false); }}>Create another</button>
+          <button className="secondaryButton" onClick={() => { setStep(1); setGiftUrl(""); setCopied(false); setEmailStatus(""); }}>Create another</button>
         </section>
       )}
 
