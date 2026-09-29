@@ -8,6 +8,7 @@ export default function HomePage() {
         <div className="buttonRow">
           <Link className="pill" href="/my-gifts">My BetGifts</Link>
           <Link className="pill" href="/analytics">Analytics</Link>
+          <Link className="pill" href="/admin">Admin</Link>
           <span className="pill">Alpha</span>
         </div>
       </nav>
