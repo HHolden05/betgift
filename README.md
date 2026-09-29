@@ -64,10 +64,10 @@ Run `supabase/schema.sql` in the Supabase SQL editor, then add these Vercel envi
 
 ```
 SUPABASE_URL=https://YOUR_PROJECT.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=YOUR_SERVER_ONLY_SERVICE_ROLE_KEY
+SUPABASE_SECRET_KEY=YOUR_SERVER_ONLY_SECRET_KEY
 ```
 
-Never expose the service-role key in client-side code or commit it to GitHub.
+Never expose the secret key in client-side code or commit it to GitHub.
 
 ## Next milestones
 
@@ -91,3 +91,14 @@ Because this repository is already on GitHub, the recommended deployment path is
 7. After the first deployment is live, optionally add **ODDS_API_KEY** and redeploy for live odds.
 
 No build command override is needed. Vercel will use `npm run build`.
+
+
+### BetGift Supabase project
+
+Project URL:
+
+```
+https://ldszsrpjywndqcprzaze.supabase.co
+```
+
+For new projects, use a Supabase **secret key** (`sb_secret_...`) on the server rather than the legacy service-role key. Keep it in Vercel environment variables only; never expose it with a `NEXT_PUBLIC_` prefix.
