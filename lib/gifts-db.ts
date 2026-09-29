@@ -9,6 +9,7 @@ type GiftRow = {
   code: string;
   recipient_name: string;
   recipient_phone: string | null;
+  recipient_email: string | null;
   amount: number;
   message: string;
   event_data: GiftPayload["event"];
@@ -30,6 +31,7 @@ function rowToGift(row: GiftRow): GiftPayload {
   return {
     recipientName: row.recipient_name,
     recipientPhone: row.recipient_phone ?? undefined,
+    recipientEmail: row.recipient_email ?? undefined,
     amount: Number(row.amount),
     message: row.message,
     event: row.event_data,
@@ -48,6 +50,8 @@ export async function createStoredGift(payload: GiftPayload) {
       code,
       recipient_name: payload.recipientName,
       recipient_phone: payload.recipientPhone || null,
+      recipient_email: payload.recipientEmail || null,
+      email_status: payload.recipientEmail ? "pending" : "not_requested",
       amount: payload.amount,
       message: payload.message,
       event_data: payload.event,
@@ -91,5 +95,19 @@ export async function markGiftClaimed(code: string) {
   await supabase
     .from("gifts")
     .update({ status: "claimed", claimed_at: new Date().toISOString() })
+    .eq("code", code);
+}
+
+
+export async function markGiftEmailStatus(code: string, status: "sent" | "failed") {
+  if (!isSupabaseConfigured()) return;
+  const supabase = getSupabaseAdmin();
+
+  await supabase
+    .from("gifts")
+    .update({
+      email_status: status,
+      email_sent_at: status === "sent" ? new Date().toISOString() : null
+    })
     .eq("code", code);
 }
