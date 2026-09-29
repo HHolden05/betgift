@@ -58,3 +58,18 @@ Gift links currently encode the demo gift payload in the URL token. This makes l
 4. Analytics funnel instrumentation.
 5. Operator-approved sportsbook deep links.
 6. Legal/compliance review before any real-money functionality.
+
+
+## Fastest production deployment
+
+Because this repository is already on GitHub, the recommended deployment path is Vercel Git integration:
+
+1. In Vercel, choose **Add New → Project**.
+2. Import **HHolden05/betgift**.
+3. Keep Framework Preset as **Next.js**.
+4. Keep Root Directory as **./**.
+5. Do not add any environment variables for the first deploy; BetGift will use demo odds.
+6. Click **Deploy**.
+7. After the first deployment is live, optionally add **ODDS_API_KEY** and redeploy for live odds.
+
+No build command override is needed. Vercel will use `npm run build`.
