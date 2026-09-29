@@ -8,8 +8,15 @@ function authorized(request: Request) {
 }
 
 export async function GET(request: Request) {
+  if (!process.env.ADMIN_ACCESS_KEY) {
+    return NextResponse.json(
+      { error: "Admin access key is not configured on the server." },
+      { status: 503 }
+    );
+  }
+
   if (!authorized(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Incorrect admin key." }, { status: 401 });
   }
 
   if (!isSupabaseConfigured()) {
