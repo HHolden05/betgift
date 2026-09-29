@@ -22,6 +22,7 @@ export type EventOption = {
 export type GiftPayload = {
   recipientName: string;
   recipientPhone?: string;
+  recipientEmail?: string;
   amount: number;
   message: string;
   event: EventOption;
