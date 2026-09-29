@@ -33,3 +33,24 @@
 .status-claimed {
   border-color: currentColor;
 }
+
+
+.analyticsHeader{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:24px}
+.analyticsHeader h1{font-size:clamp(38px,6vw,62px);line-height:1;letter-spacing:-.045em;margin:0 0 12px}
+.metricGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+.metricCard{background:#0f1814;border:1px solid #22352b;border-radius:18px;padding:18px;display:grid;gap:8px}
+.metricCard span,.metricCard small{color:#8c9d94;font-size:12px}
+.metricCard strong{font-size:28px;letter-spacing:-.03em}
+.analyticsGrid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}
+.analyticsGrid .flowCard{min-width:0}
+.analyticsGrid h2{margin:0;font-size:24px}
+.barChart{display:flex;align-items:end;gap:8px;min-height:210px;overflow-x:auto;padding-top:16px}
+.barColumn{min-width:42px;height:180px;display:grid;grid-template-rows:20px 1fr 28px;align-items:end;text-align:center;gap:5px}
+.barColumn span,.barValue{font-size:10px;color:#84958c}
+.barTrack{height:125px;width:100%;background:#14231c;border-radius:10px 10px 4px 4px;display:flex;align-items:end;overflow:hidden}
+.barFill{width:100%;background:#19c76c;border-radius:10px 10px 4px 4px}
+.rankingList,.funnelList{display:grid;gap:10px}
+.rankingRow,.funnelList>div{display:flex;justify-content:space-between;gap:16px;background:#101b16;border:1px solid #273a30;border-radius:13px;padding:13px 14px}
+.funnelList>div span{color:#9bada2}
+@media(max-width:900px){.metricGrid{grid-template-columns:repeat(2,1fr)}.analyticsGrid{grid-template-columns:1fr}}
+@media(max-width:680px){.analyticsHeader{align-items:stretch;flex-direction:column}.metricGrid{grid-template-columns:1fr 1fr}}
