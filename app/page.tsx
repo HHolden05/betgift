@@ -5,7 +5,10 @@ export default function HomePage() {
     <main className="shell">
       <nav className="nav">
         <div className="brand"><span className="brandDot" />BETGIFT</div>
-        <span className="pill">Alpha</span>
+        <div className="buttonRow">
+          <Link className="pill" href="/my-gifts">My BetGifts</Link>
+          <span className="pill">Alpha</span>
+        </div>
       </nav>
 
       <section className="hero">
