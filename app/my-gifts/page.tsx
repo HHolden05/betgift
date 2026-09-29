@@ -79,6 +79,12 @@ export default function MyGiftsPage() {
     loadHistory();
   }, []);
 
+  function textGift(code: string) {
+    const url = `${window.location.origin}/g/${code}`;
+    const body = `You got a BetGift 🎁 ${url}`;
+    window.location.href = `sms:?&body=${encodeURIComponent(body)}`;
+  }
+
   function clearHistory() {
     window.localStorage.removeItem(STORAGE_KEY);
     setGifts([]);
@@ -139,6 +145,9 @@ export default function MyGiftsPage() {
                 <Link className="secondaryButton" href={`/g/${gift.code}`}>Open gift</Link>
                 <button className="secondaryButton" onClick={() => navigator.clipboard.writeText(`${window.location.origin}/g/${gift.code}`)}>
                   Copy link
+                </button>
+                <button className="secondaryButton" onClick={() => textGift(gift.code)}>
+                  Text gift
                 </button>
               </div>
             </article>
