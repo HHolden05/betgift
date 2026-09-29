@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { encodeGift } from "@/lib/gift-token";
+import { createStoredGift } from "@/lib/gifts-db";
 
 const schema = z.object({
   recipientName: z.string().min(1).max(80),
@@ -28,14 +29,25 @@ const schema = z.object({
 
 export async function POST(request: Request) {
   const parsed = schema.safeParse(await request.json());
-  if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid gift details" }, { status: 400 });
-  }
+  if (!parsed.success) return NextResponse.json({ error: "Invalid gift details" }, { status: 400 });
 
-  const payload = {
-    ...parsed.data,
-    createdAt: new Date().toISOString()
-  };
+  const payload = { ...parsed.data, createdAt: new Date().toISOString() };
+
+  try {
+    const code = await createStoredGift(payload);
+
+    if (code) {
+      return NextResponse.json({
+        token: code,
+        giftUrl: `/g/${code}`,
+        mode: "database",
+        disclaimer: "No money moved and no wager was placed."
+      });
+    }
+  } catch (error) {
+    console.error("Supabase gift creation failed", error);
+    return NextResponse.json({ error: "The gift database is temporarily unavailable." }, { status: 503 });
+  }
 
   const token = encodeGift(payload);
   return NextResponse.json({
