@@ -1,13 +1,25 @@
 import Link from "next/link";
 import { decodeGift } from "@/lib/gift-token";
+import { getStoredGift, markGiftClaimed } from "@/lib/gifts-db";
+
+export const dynamic = "force-dynamic";
 
 export default async function ClaimPage({
   searchParams
 }: {
-  searchParams: Promise<{ token?: string; book?: string }>
+  searchParams: Promise<{ token?: string; code?: string; book?: string }>
 }) {
   const query = await searchParams;
-  const gift = query.token ? decodeGift(query.token) : null;
+  const code = query.code?.toUpperCase();
+
+  let gift = null;
+  if (code) {
+    gift = await getStoredGift(code);
+    if (gift) await markGiftClaimed(code);
+  } else if (query.token) {
+    gift = decodeGift(query.token);
+  }
+
   const book = query.book || "sportsbook";
 
   return (
