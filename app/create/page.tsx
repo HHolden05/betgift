@@ -21,6 +21,7 @@ export default function CreatePage() {
   const [amount, setAmount] = useState(50);
   const [message, setMessage] = useState("Happy birthday — Go Birds.");
   const [giftUrl, setGiftUrl] = useState("");
+  const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -34,6 +35,17 @@ export default function CreatePage() {
   }, []);
 
   const payout = useMemo(() => bet ? americanPayout(amount, bet.odds) : 0, [amount, bet]);
+
+  async function copyGiftLink() {
+    if (!giftUrl) return;
+    try {
+      await navigator.clipboard.writeText(giftUrl);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setError("Copy failed. You can still select the link manually.");
+    }
+  }
 
   async function createGift() {
     if (!event || !bet || !recipientName.trim()) return;
@@ -162,8 +174,11 @@ export default function CreatePage() {
           <h1>Send it to {recipientName}</h1>
           <p className="lede small">The link works on another device. It contains a simulated gift only — no payment or wager.</p>
           <div className="shareBox">{giftUrl}</div>
-          <a className="primaryButton" href={giftUrl}>Open recipient view</a>
-          <button className="secondaryButton" onClick={() => { setStep(1); setGiftUrl(""); }}>Create another</button>
+          <div className="buttonRow">
+            <button className="secondaryButton" onClick={copyGiftLink}>{copied ? "Copied" : "Copy gift link"}</button>
+            <a className="primaryButton" href={giftUrl}>Open recipient view</a>
+          </div>
+          <button className="secondaryButton" onClick={() => { setStep(1); setGiftUrl(""); setCopied(false); }}>Create another</button>
         </section>
       )}
 
