@@ -64,6 +64,19 @@ export default function CreatePage() {
     }
     setGiftUrl(`${window.location.origin}${data.giftUrl}`);
     setEmailStatus(data.emailStatus ?? "");
+
+    if (data.mode === "database" && data.token) {
+      try {
+        const storageKey = "betgift:saved-codes";
+        const current = JSON.parse(window.localStorage.getItem(storageKey) || "[]");
+        const codes = Array.isArray(current) ? current.filter((code) => typeof code === "string") : [];
+        const next = [String(data.token).toUpperCase(), ...codes.filter((code) => code !== data.token)].slice(0, 100);
+        window.localStorage.setItem(storageKey, JSON.stringify(next));
+      } catch {
+        // Gift creation still succeeds if local history cannot be saved.
+      }
+    }
+
     setStep(6);
   }
 
@@ -188,7 +201,10 @@ export default function CreatePage() {
             <button className="secondaryButton" onClick={copyGiftLink}>{copied ? "Copied" : "Copy gift link"}</button>
             <a className="primaryButton" href={giftUrl}>Open recipient view</a>
           </div>
-          <button className="secondaryButton" onClick={() => { setStep(1); setGiftUrl(""); setCopied(false); setEmailStatus(""); }}>Create another</button>
+          <div className="buttonRow">
+            <a className="secondaryButton" href="/my-gifts">My BetGifts</a>
+            <button className="secondaryButton" onClick={() => { setStep(1); setGiftUrl(""); setCopied(false); setEmailStatus(""); }}>Create another</button>
+          </div>
         </section>
       )}
 
